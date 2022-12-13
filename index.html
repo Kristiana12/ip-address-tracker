@@ -47,8 +47,8 @@
           type="search"
           id="ip-address"
           placeholder="Search for any IP address or domain IP Address Location Timezone UTC"
-          required
         />
+        <p class="error-message">Invalid ip address or domain name</p>
         <button class="search-btn">
           <img src="images/icon-arrow.svg" alt="search" arial-label="search" />
         </button>
@@ -57,22 +57,28 @@
       <div class="info-container">
         <div class="info-row">
           <h2 class="info-subtitle">Ip Address</h2>
-          <p class="info-location">192.212.174.101</p>
+          <p class="info-location" id="ip">192.212.174.101</p>
         </div>
+
+        <div class="divider none"></div>
 
         <div class="info-row">
           <h2 class="info-subtitle">Location</h2>
-          <p class="info-location">Brookly, NY 10001</p>
+          <p class="info-location" id="region">Brooklyn, NY 10001</p>
         </div>
+
+        <div class="divider none"></div>
 
         <div class="info-row">
           <h2 class="info-subtitle">Timezone</h2>
-          <p class="info-location">UTC -05:00</p>
+          <p class="info-location" id="timezone">UTC -05:00</p>
         </div>
+
+        <div class="divider none"></div>
 
         <div class="info-row">
           <h2 class="info-subtitle">ISP</h2>
-          <p class="info-location">SpaceX Starlink</p>
+          <p class="info-location" id="isp">SpaceX Starlink</p>
         </div>
       </div>
     </header>
