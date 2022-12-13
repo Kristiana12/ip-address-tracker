@@ -41,8 +41,8 @@
   --pad-placeholder: 1.125rem;
   --pad-mob-container: 1.625rem 1.5rem;
 
-  --pad-desk-heading: 2rem 0;
-  --pad-desk-container: 2rem;
+  --pad-desk-heading: 2rem 0 2.2rem;
+  --pad-desk-container: 2.1rem 2rem;
 }
 
 body {
@@ -140,7 +140,6 @@ body {
   align-items: center;
   justify-content: center;
   gap: 1.5rem;
-  /* position: relative; */
 }
 
 .info-subtitle {
@@ -199,6 +198,7 @@ body {
 
     flex-direction: row;
     justify-content: space-between;
+    align-items: start;
     gap: 1.5rem;
   }
 
@@ -209,6 +209,9 @@ body {
   .info-subtitle {
     font-size: var(--fsz-desk-sub-heading);
     margin-bottom: 0.8rem;
+  }
+  .info-location {
+    font-size: var(--fsz-desk-text);
   }
 
   /* MAP */
