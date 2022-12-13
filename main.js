@@ -75,9 +75,7 @@ const getData = async (request) => {
   let data;
   try {
     const response = await fetch(request);
-    console.log(response);
     data = await response.json();
-    console.log(data);
     if (!response.ok) {
       displayError(`Something went wrong: ${data.messages}`);
       throw new Error(`Something went wrong: ${data.messages}`);
