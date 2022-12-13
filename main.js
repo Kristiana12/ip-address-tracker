@@ -68,36 +68,49 @@ const removeError = () => {
   errorMsgEL.textContent = '';
 };
 
+//reject promise if data could not be fetched
+
 //Get Location Data
 const getData = async (request) => {
+  let data;
   try {
     const response = await fetch(request);
-    const data = await response.json();
-    const location = data.location;
-
-    /* Show on Map location */
-    showUserLocation(location.lat, location.lng);
-    /* Display IP */
-    IpAddressUI(data.ip);
-    /* Display City*/
-    displayRegionUI(location.city, location.country, location.postalCode);
-    /* Display Timezone */
-    displayTimezoneUI(location.timezone);
-    /* Display ISP */
-    displayIspUI(data.isp);
+    console.log(response);
+    data = await response.json();
+    console.log(data);
+    if (!response.ok) {
+      displayError(`Something went wrong: ${data.messages}`);
+      throw new Error(`Something went wrong: ${data.messages}`);
+    }
   } catch {
-    (err) => displayError(`Something went wrong: ${err.message}`);
+    (err) => {
+      displayError(`Something went wrong: ${err.message}`);
+    };
   }
+
+  const location = data.location;
+  /* Show on Map location */
+  showUserLocation(location.lat, location.lng);
+  /* Display IP */
+  IpAddressUI(data.ip);
+  /* Display City*/
+  displayRegionUI(location.city, location.country, location.postalCode);
+  /* Display Timezone */
+  displayTimezoneUI(location.timezone);
+  /* Display ISP */
+  displayIspUI(data.isp);
 };
 
-// getData(
-//   'https://geo.ipify.org/api/v2/country,city,vpn?apiKey=at_kJ1AeaUq5icvRTFfvJl3qJxdYGZF6'
-// );
+getData(
+  'https://geo.ipify.org/api/v2/country,city,vpn?apiKey=at_kJ1AeaUq5icvRTFfvJl3qJxdYGZF6'
+);
 
 //Modify input to avoid errors when fetching Data
 const modifyInput = (input) => {
   const newInputSecure = input.includes('https://www.');
+  const newInputSecure2 = input.includes('https://');
   const newInput = input.includes('http://www.');
+  const newInput2 = input.includes('http://');
   const normalInput = input.includes('www.');
   const domainLastChar = input[input.length - 1] === '/';
 
@@ -105,12 +118,18 @@ const modifyInput = (input) => {
   if (domainLastChar) {
     input = input.slice(0, -1);
   }
+
+  //Remove the 'prefixes' to avoid problems when fetching Data
   if (newInputSecure) {
     input = input.replace('https://www.', '');
-  } else if (newInput) {
-    input = input.replace('http://www.', '');
+  } else if (newInputSecure2) {
+    input = input.replace('https://', '');
   } else if (normalInput) {
     input = input.replace('www.', '');
+  } else if (newInput) {
+    input = input.replace('http://www.', '');
+  } else if (newInput2) {
+    input = input.replace('http://', '');
   }
   return input.trim();
 };
@@ -120,30 +139,23 @@ const checkInputValidation = (input) => {
   const regexIP =
     /^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/gi;
 
-  //Check whether a string looks like a valid domain name:
+  //Check whether a string looks like a valid domain name
   const regexDomain = /\b([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,}\b/;
 
   const modifiedInput = modifyInput(input);
 
   //Fetch Data depends on the users input (domain or ip address)
   if (regexIP.test(input)) {
-    console.log('ip');
-    console.log(modifiedInput);
-
     removeError();
-    // getData(
-    //   `https://geo.ipify.org/api/v2/country,city,vpn?apiKey=at_kJ1AeaUq5icvRTFfvJl3qJxdYGZF6&ipAddress=${input}`
-    // );
+    getData(
+      `https://geo.ipify.org/api/v2/country,city,vpn?apiKey=at_kJ1AeaUq5icvRTFfvJl3qJxdYGZF6&ipAddress=${modifiedInput}`
+    );
   } else if (regexDomain.test(input)) {
-    console.log('domain');
-    console.log(modifiedInput);
-
     removeError();
-    // getData(
-    //   `https://geo.ipify.org/api/v2/country,city,vpn?apiKey=at_kJ1AeaUq5icvRTFfvJl3qJxdYGZF6&domain=${input}`
-    // );
+    getData(
+      `https://geo.ipify.org/api/v2/country,city,vpn?apiKey=at_kJ1AeaUq5icvRTFfvJl3qJxdYGZF6&domain=${modifiedInput}`
+    );
   } else {
-    console.log('error');
     displayError();
   }
 };
