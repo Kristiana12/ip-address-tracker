@@ -1,11 +1,16 @@
 const searchBtn = document.querySelector('.search-btn');
 const form = document.getElementById('search-ip');
 const errorMsgEL = document.querySelector('.error-message');
+let map;
 
 //Show user on leaflet
 const showUserLocation = (lat, lng) => {
+  //remove previous map if it exists
+  if (map) {
+    map.remove();
+  }
   //Show user location on Map
-  const map = L.map('map').setView([lat, lng], 14);
+  map = L.map('map').setView([lat, lng], 14);
 
   //Google maps
   const googleStreet = L.tileLayer(
@@ -68,22 +73,20 @@ const removeError = () => {
   errorMsgEL.textContent = '';
 };
 
-//reject promise if data could not be fetched
-
 //Get Location Data
 const getData = async (request) => {
   let data;
   try {
     const response = await fetch(request);
-    data = await response.json();
+    //if request fails
     if (!response.ok) {
-      displayError(`Something went wrong: ${data.messages}`);
-      throw new Error(`Something went wrong: ${data.messages}`);
+      throw new Error(`Something went wrong, could not get location `);
     }
-  } catch {
-    (err) => {
-      displayError(`Something went wrong: ${err.message}`);
-    };
+    data = await response.json();
+  } catch (err) {
+    displayError(err.message);
+    //Reject Promise returned from async function
+    throw err;
   }
 
   const location = data.location;
