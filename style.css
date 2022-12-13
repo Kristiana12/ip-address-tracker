@@ -37,12 +37,12 @@
   --border-radius: 15px;
 
   /* paddings */
-  --pad-mob-heading: 1.625rem 0 2rem;
+  --pad-mob-heading: 1.8rem 0 2rem;
   --pad-placeholder: 1.125rem;
   --pad-mob-container: 1.625rem 1.5rem;
 
   --pad-desk-heading: 2rem 0;
-  --pad-desk-container: 2.25rem 2rem;
+  --pad-desk-container: 2rem;
 }
 
 body {
@@ -140,7 +140,7 @@ body {
   align-items: center;
   justify-content: center;
   gap: 1.5rem;
-  position: relative;
+  /* position: relative; */
 }
 
 .info-subtitle {
